@@ -1,0 +1,55 @@
+{
+  "name": "json-path-finder",
+  "author": "Abdhesh Nayak",
+  "license": "MIT",
+	"version": "1.0.0",
+  "description": "",
+  "private": false,
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdheshnayak/json-path-finder.git"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+	"scripts": {
+		"build": "esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js --minify",
+		"dev": "esbuild src/test.ts --bundle --format=cjs --outfile=out/index.cjs && node out/index.cjs"
+	},
+  "devDependencies": {
+    "@babel/core": "^7.21.8",
+    "@babel/preset-env": "^7.22.5",
+    "@remix-run/dev": "^1.19.2",
+    "@remix-run/serve": "^1.19.2",
+    "@types/cookie": "^0.5.1",
+    "@types/js-cookie": "^3.0.3",
+    "@types/js-yaml": "^4.0.5",
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "@types/react-ranger": "^2.0.1",
+    "@types/uuid": "^9.0.2",
+    "@types/websocket": "^1.0.6",
+    "@typescript-eslint/eslint-plugin": "^6.4.1",
+    "@typescript-eslint/parser": "^6.4.1",
+    "autoprefixer": "^10.4.2",
+    "eslint": "^8.47.0",
+    "eslint-config-airbnb": "19.0.4",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-import-resolver-jsconfig": "^1.1.0",
+    "eslint-import-resolver-node": "^0.3.6",
+    "eslint-import-resolver-typescript": "^3.6.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-prefer-arrow-functions": "^3.1.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "nodemon": "^2.0.22",
+    "prettier": "^2.8.8",
+		"esbuild": "^0.19.2"
+  }
+}
