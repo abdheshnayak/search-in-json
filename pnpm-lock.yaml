@@ -4,11 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  '@abdheshnayak/json-path-finder':
-    specifier: ^1.0.1
-    version: 1.0.1
-
 devDependencies:
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.4.1
@@ -65,10 +60,6 @@ packages:
     resolution: {integrity: sha512-1Yjs2SvM8TflER/OD3cOjhWWOZb58A2t7wpE2S9XfBYTiIl+XFhQG2bjy4Pu1I+EAlCNUzRDYDdFwFYUKvXcIA==}
     engines: {node: '>=0.10.0'}
     dev: true
-
-  /@abdheshnayak/json-path-finder@1.0.1:
-    resolution: {integrity: sha512-eYL1utHLmteqy/J8OHOmTFRd/Ebrc7OI9CEChwkBH8Wrt5CIszi72N/GwvuXvSGtFPOPAQQ4nh5vMh17VYonQg==}
-    dev: false
 
   /@babel/runtime@7.22.11:
     resolution: {integrity: sha512-ee7jVNlWN09+KftVOu9n7S8gQzD/Z6hN/I8VBRXW4P1+Xe7kJGXMwu8vds4aGIMHZnNbdpSWCfZZtinytpcAvA==}

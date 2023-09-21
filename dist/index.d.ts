@@ -8,8 +8,11 @@ export interface SearchResult {
   endIndex: number;
 }
 
-export function search(
-  data: Map,
-  text: string,
-  debug?: boolean
-): SearchResult[];
+interface ISearch {
+  data: Map;
+  text: string;
+  ignoreCamelCase?: boolean;
+  debug?: boolean;
+}
+
+export function search(props: ISearch): SearchResult[];
