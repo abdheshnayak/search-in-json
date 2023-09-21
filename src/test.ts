@@ -6,5 +6,7 @@ console.log(
     data,
     text: 'order',
     debug: true,
+    ignoreCamelCase: true,
+    // regex: /order/gi,
   })
 );

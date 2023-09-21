@@ -1,3 +1,5 @@
+import { ISearch, ISearchResult } from '../types';
+
 const getPath = (
   data: any,
   depth: number,
@@ -87,22 +89,25 @@ const getPath = (
   };
 };
 
-interface ISearch {
-  data: any;
-  text: string;
-  ignoreCamelCase?: boolean;
-  debug?: boolean;
-}
-
 export const search = ({
   data,
   text,
   debug = false,
   ignoreCamelCase = false,
-}: ISearch) => {
+  regex,
+}: ISearch): ISearchResult => {
   const dataString = JSON.stringify(data, null, 2);
 
-  const regex = new RegExp(text, ignoreCamelCase ? 'gi' : 'g');
+  if (text) {
+    regex = new RegExp(text, ignoreCamelCase ? 'gi' : 'g');
+  }
+
+  if (!regex) {
+    return {
+      result: [],
+      error: new Error('No regex provided'),
+    };
+  }
 
   let match = regex.exec(dataString);
   const searchResult = [];
@@ -122,7 +127,7 @@ export const search = ({
       if (res.found) {
         searchResult.push({
           key: res.key,
-          index: res.index,
+          index: res.index || 0,
           endIndex: (res.index || 0) + match[0].length,
         });
       }
@@ -133,5 +138,7 @@ export const search = ({
   if (debug) {
     console.timeEnd('search');
   }
-  return searchResult;
+  return {
+    result: searchResult,
+  };
 };
