@@ -23,6 +23,16 @@ const getPath = (
 
   for (const key in data) {
     // console.log(depth, key);
+    if (Array.isArray(data[key]) && data[key].length === 0) {
+      --depth;
+      continue;
+    } else if (
+      typeof data[key] === 'object' &&
+      Object.keys(data[key]).length === 0
+    ) {
+      --depth;
+      continue;
+    }
     if (typeof data[key] === 'object' && depth > 0) {
       // @ts-ignore
       const res = getPath(data[key], depth - 1, key, indent + 1, index);
@@ -77,9 +87,23 @@ const getPath = (
   };
 };
 
-export const search = (data: any, text: string, debug: boolean = false) => {
+interface ISearch {
+  data: any;
+  text: string;
+  ignoreCamelCase?: boolean;
+  debug?: boolean;
+}
+
+export const search = ({
+  data,
+  text,
+  debug = false,
+  ignoreCamelCase = false,
+}: ISearch) => {
   const dataString = JSON.stringify(data, null, 2);
-  const regex = new RegExp(text, 'g');
+
+  const regex = new RegExp(text, ignoreCamelCase ? 'gi' : 'g');
+
   let match = regex.exec(dataString);
   const searchResult = [];
 

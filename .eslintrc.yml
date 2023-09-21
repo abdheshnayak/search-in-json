@@ -54,6 +54,7 @@ rules:
   # pritter rules
 
   # ts rules
+  no-continue: 0
   camelcase: 0
   guard-for-in: 0
   no-plusplus: 0

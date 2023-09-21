@@ -1,4 +1,10 @@
-import { search } from '../dist/index';
+import { search } from '.';
 import { data } from './data';
 
-console.log(search(data, 'smith'));
+console.log(
+  search({
+    data,
+    text: 'order',
+    debug: true,
+  })
+);
