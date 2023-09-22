@@ -17,13 +17,13 @@ const shared = {
 build({
   ...shared,
   format: 'esm',
-  outfile: './dist/esm/index.mjs',
+  outfile: './dist/index.mjs',
   target: ['esnext', 'node20.6.0'],
 });
 
 build({
   ...shared,
   format: 'cjs',
-  outfile: './dist/cjs/index.js',
+  outfile: './dist/index.js',
   target: ['esnext', 'node20.6.0'],
 });

@@ -2,21 +2,20 @@
   "name": "search-in-json",
   "author": "Abdhesh Nayak",
   "license": "MIT",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "private": false,
-  "types": "./types/index.d.ts",
-  "main": "/src/cjs/index.js",
-  "module": "./dist/esm/index.mjs",
-  "source": "src/index.tsx",
+  "types": "./dist/@types/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "sideEffects": false,
   "exports": {
     ".": {
       "import": {
-        "default": "./dist/esm/index.mjs"
+        "default": "./dist/index.mjs"
       },
       "require": {
-        "default": "./dist/cjs/index.js"
+        "default": "./dist/index.js"
       }
     }
   },
@@ -33,7 +32,6 @@
   ],
   "files": [
     "dist",
-    "types",
     "README.md",
     "LICENSE"
   ],
@@ -41,9 +39,10 @@
     "access": "public"
   },
   "scripts": {
-    "build": "npm run clean && node build.js",
+    "build": "npm run clean && node build.js && npm run tsc",
     "clean": "rimraf dist",
-    "dev": "esbuild src/test.ts --bundle --format=cjs --outfile=out/index.cjs && node out/index.cjs"
+    "dev": "esbuild src/test.ts --bundle --format=cjs --outfile=out/index.cjs && node out/index.cjs",
+    "tsc": "tsc --emitDeclarationOnly --outDir ./dist/@types"
   },
   "dependencies":{},
   "devDependencies": {
