@@ -5,7 +5,7 @@ This is a simple tool to find the path of a key in a JSON object. You can use it
 ## Example
 
 ```js
-import { search } from '@abdheshnayak/json-path-finder';
+import { search } from 'search-in-json';
 import { data } from './data';
 
 console.log(
@@ -18,11 +18,11 @@ console.log(
 );
 
 ```
-# Exmple2 with regex
+## Exmple2 with regex
 
 
 ```js
-import { search } from '@abdheshnayak/json-path-finder';
+import { search } from 'search-in-json';
 import { data } from './data';
 
 console.log(
