@@ -12,6 +12,13 @@
     "type": "git",
     "url": "git+https://github.com/abdheshnayak/json-path-finder.git"
   },
+  "keywords": [
+    "search",
+    "json",
+    "fast",
+    "optimised",
+    "get-json-path"
+  ],
   "files": [
     "dist",
     "types",
