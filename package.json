@@ -2,12 +2,24 @@
   "name": "search-in-json",
   "author": "Abdhesh Nayak",
   "license": "MIT",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "private": false,
-  "types": "index.d.ts",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "types": "./types/index.d.ts",
+  "main": "/src/cjs/index.js",
+  "module": "./dist/esm/index.mjs",
+  "source": "src/index.tsx",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": {
+        "default": "./dist/esm/index.mjs"
+      },
+      "require": {
+        "default": "./dist/cjs/index.js"
+      }
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abdheshnayak/json-path-finder.git"
@@ -25,11 +37,19 @@
     "README.md",
     "LICENSE"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
-    "build": "esbuild src/index.ts --bundle --format=esm --outfile=dist/index.js --minify",
+    "build": "npm run clean && node build.js",
+    "clean": "rimraf dist",
+    "build:esm": "esbuild src/index.ts --bundle --format=esm --outfile=dist/esm/index.mjs",
+    "build:cjs": "esbuild src/index.ts --format=cjs --outfile=dist/cjs/index.cjs",
     "dev": "esbuild src/test.ts --bundle --format=cjs --outfile=out/index.cjs && node out/index.cjs"
   },
+  "dependencies":{},
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.1",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
     "esbuild": "^0.19.2",
@@ -45,6 +65,9 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.3.0",
-    "prettier": "^2.8.8"
+    "prettier": "^2.8.8",
+    "rimraf": "^5.0.1",
+    "rollup": "^3.29.2",
+    "typescript": "^5.2.2"
   }
 }

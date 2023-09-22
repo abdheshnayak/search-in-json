@@ -2,7 +2,7 @@
   "include": ["**/*.ts"],
   "compilerOptions": {
     "skipLibCheck": true,
-    "lib": ["DOM", "DOM.Iterable", "ES2019"],
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "isolatedModules": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
@@ -15,8 +15,7 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "forceConsistentCasingInFileNames": true,
-
-    "noEmit": true
+    "declaration": true,
   },
   "exclude": [
     "node_modules"

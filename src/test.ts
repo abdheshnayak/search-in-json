@@ -1,4 +1,4 @@
-import { search } from '../dist';
+import { search } from '.';
 import { data } from './data';
 
 console.log(
