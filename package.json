@@ -2,7 +2,7 @@
   "name": "search-in-json",
   "author": "Abdhesh Nayak",
   "license": "MIT",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "private": false,
   "types": "./dist/@types/index.d.ts",
@@ -45,8 +45,8 @@
     "tsc": "tsc --emitDeclarationOnly --outDir ./dist/@types"
   },
   "dependencies":{},
+  "peerDependencies":{},
   "devDependencies": {
-    "@rollup/plugin-node-resolve": "^15.2.1",
     "@typescript-eslint/eslint-plugin": "^6.4.1",
     "@typescript-eslint/parser": "^6.4.1",
     "esbuild": "^0.19.2",
@@ -64,7 +64,6 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "prettier": "^2.8.8",
     "rimraf": "^5.0.1",
-    "rollup": "^3.29.2",
     "typescript": "^5.2.2"
   }
 }

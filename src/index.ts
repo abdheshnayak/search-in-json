@@ -8,12 +8,20 @@ export interface SearchResult {
   endIndex: number;
 }
 
-export interface ISearch {
+type ISResult<WantMap> = WantMap extends true
+  ? {
+      [key: string]: SearchResult;
+    }
+  : Array<SearchResult>;
+
+export interface ISearch<A> {
   data: Map;
   text?: string;
   ignoreCamelCase?: boolean;
   debug?: boolean;
   regex?: RegExp;
+  searchIn?: 'keys' | 'values' | 'both';
+  withMapResult?: A;
 }
 
 export interface SearchResultItem {
@@ -22,18 +30,34 @@ export interface SearchResultItem {
   endIndex: number;
 }
 
-export interface ISearchResult {
-  result: SearchResultItem[];
+export interface ISearchResult<A> {
+  result: ISResult<A>;
   error?: Error;
 }
 
-const getPath = (
-  data: any,
-  depth: number,
-  key: '',
-  indent: number,
-  index: number
-): { key: string; depth: number; found: boolean; index?: number } => {
+interface IGetPath {
+  data: any;
+  depth: number;
+  key: string;
+  indent: number;
+  cursorIndex: number;
+  searchIn: 'values' | 'keys' | 'both';
+}
+
+const getPath = ({
+  data,
+  depth,
+  key,
+  indent,
+  cursorIndex,
+  searchIn,
+}: IGetPath): {
+  key: string;
+  depth: number;
+  found: boolean;
+  index?: number;
+  foundIn?: 'values' | 'keys';
+} => {
   if (depth <= 0) {
     return {
       key,
@@ -63,8 +87,14 @@ const getPath = (
       continue;
     }
     if (typeof data[key] === 'object' && depth > 0) {
-      // @ts-ignore
-      const res = getPath(data[key], depth - 1, key, indent + 1, index);
+      const res = getPath({
+        data: data[key],
+        depth: depth - 1,
+        key,
+        indent: indent + 1,
+        cursorIndex,
+        searchIn,
+      });
       depth = res.depth;
 
       if (depth === 0) {
@@ -90,22 +120,54 @@ const getPath = (
     --depth;
 
     if (depth <= 0) {
-      const check = index >= indent * 2 + key.length;
+      const check = cursorIndex >= indent * 2 + key.length;
 
-      if (check) {
+      if (searchIn === 'values' && check) {
         return {
           key,
           depth: 0,
-          found: check,
-          index: index - (indent * 2 + key.length + 4) - 1,
+          found: true,
+          foundIn: 'values',
+          index: cursorIndex - (indent * 2 + key.length + 4) - 1,
+        };
+      }
+
+      if (searchIn === 'keys' && !check) {
+        return {
+          key,
+          depth: 0,
+          found: true,
+          foundIn: 'keys',
+          index: cursorIndex - (indent * 2 + 1),
+        };
+      }
+
+      if (searchIn === 'both') {
+        if (check) {
+          return {
+            key,
+            depth: 0,
+            found: true,
+            index: cursorIndex - (indent * 2 + key.length + 4) - 1,
+            foundIn: 'values',
+          };
+        }
+
+        return {
+          key,
+          depth: 0,
+          found: true,
+          index: cursorIndex - (indent * 2 + 1),
+          foundIn: 'keys',
         };
       }
 
       return {
         key,
         depth: 0,
-        found: check,
+        found: false,
       };
+      // here
     }
   }
 
@@ -116,13 +178,15 @@ const getPath = (
   };
 };
 
-export const search = ({
+export const search = <A extends boolean | undefined = undefined>({
   data,
   text,
   debug = false,
   ignoreCamelCase = false,
   regex,
-}: ISearch): ISearchResult => {
+  searchIn = 'values',
+  withMapResult,
+}: ISearch<A>): ISearchResult<A> => {
   const dataString = JSON.stringify(data, null, 2);
 
   if (text) {
@@ -131,13 +195,15 @@ export const search = ({
 
   if (!regex) {
     return {
-      result: [],
+      result: (withMapResult ? {} : []) as ISearchResult<A>['result'],
       error: new Error('No regex provided'),
     };
   }
 
   let match = regex.exec(dataString);
-  const searchResult = [];
+  const resultMap: {
+    [key: string]: SearchResultItem;
+  } = {};
 
   if (debug) {
     console.time('search');
@@ -149,14 +215,21 @@ export const search = ({
       const path = lines.length;
       const index = lines[lines.length - 1].length;
 
-      const res = getPath(data, path - 1, '', 1, index);
+      const res = getPath({
+        data,
+        depth: path - 1,
+        key: '',
+        indent: 1,
+        cursorIndex: index,
+        searchIn,
+      });
 
       if (res.found) {
-        searchResult.push({
+        resultMap[res.key] = {
           key: res.key,
           index: res.index || 0,
           endIndex: (res.index || 0) + match[0].length,
-        });
+        };
       }
     }
 
@@ -165,7 +238,14 @@ export const search = ({
   if (debug) {
     console.timeEnd('search');
   }
+
+  if (withMapResult) {
+    return {
+      result: resultMap as ISearchResult<A>['result'],
+    };
+  }
+
   return {
-    result: searchResult,
+    result: Object.values(resultMap) as ISearchResult<A>['result'],
   };
 };
