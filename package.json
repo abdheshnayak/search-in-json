@@ -41,7 +41,7 @@
   "scripts": {
     "build": "npm run clean && node build.js && npm run tsc",
     "clean": "rimraf dist",
-    "dev": "esbuild src/test.ts --bundle --format=cjs --outfile=out/index.cjs && node out/index.cjs",
+    "dev": "esbuild test/test.ts --bundle --format=cjs --outfile=out/index.cjs && node out/index.cjs",
     "tsc": "tsc --emitDeclarationOnly --outDir ./dist/@types"
   },
   "dependencies":{},
