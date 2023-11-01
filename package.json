@@ -2,7 +2,7 @@
   "name": "search-in-json",
   "author": "Abdhesh Nayak",
   "license": "MIT",
-  "version": "1.0.6",
+  "version": "1.0.61",
   "description": "",
   "private": false,
   "types": "./dist/@types/index.d.ts",
@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OpenSource-HQ/react-pulsable.git"
+    "url": "git+https://github.com/OpenSource-HQ/search-in-json.git"
   },
   "keywords": [
     "search",
