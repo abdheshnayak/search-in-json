@@ -2,6 +2,10 @@
 
 This is a simple tool to find the path of a key in a JSON object. You can use it to find the path of a key in a JSON object, and then use the path to get the value of the key.
 
+**[Code SandBox Link](https://codesandbox.io/s/search-in-json-d2x8qs?file=/src/App.js)**
+
+![logo](./screenshot.png)
+
 ## Example
 
 ```js
