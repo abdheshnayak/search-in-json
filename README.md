@@ -1,4 +1,4 @@
-# json-path-finder
+# Search In Json (with unknown schema)
 
 This is a simple tool to find the path of a key in a JSON object. You can use it to find the path of a key in a JSON object, and then use the path to get the value of the key.
 

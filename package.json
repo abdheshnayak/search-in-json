@@ -2,7 +2,7 @@
   "name": "search-in-json",
   "author": "Abdhesh Nayak",
   "license": "MIT",
-  "version": "1.0.61",
+  "version": "1.0.62",
   "description": "",
   "private": false,
   "types": "./dist/@types/index.d.ts",
