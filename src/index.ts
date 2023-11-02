@@ -1,5 +1,5 @@
 interface Map {
-  [key: string]: string | number | boolean | Map | Array<any>;
+  [key: string]: string | number | boolean | Map | Array<any> | null;
 }
 
 export interface SearchResult {
@@ -80,8 +80,8 @@ const getPath = ({
       --depth;
       continue;
     } else if (
-      typeof data[key] === 'object' &&
-      Object.keys(data[key]).length === 0
+      data[key] == null ||
+      (typeof data[key] === 'object' && Object.keys(data[key]).length === 0)
     ) {
       --depth;
       continue;
