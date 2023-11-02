@@ -7,7 +7,7 @@ const init = () => {
     text: 'r',
     debug: true,
     ignoreCamelCase: true,
-    searchIn: 'values',
+    searchIn: 'both',
     // regex: /order/gi,
   });
 

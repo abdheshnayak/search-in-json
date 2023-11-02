@@ -6,6 +6,7 @@ export interface SearchResult {
   key: string;
   index: number;
   endIndex: number;
+  foundIn: 'values' | 'keys';
 }
 
 type ISResult<WantMap> = WantMap extends true
@@ -28,6 +29,7 @@ export interface SearchResultItem {
   key: string;
   index?: number;
   endIndex: number;
+  foundIn: 'values' | 'keys';
 }
 
 export interface ISearchResult<A> {
@@ -254,6 +256,7 @@ export const search = <A extends boolean | undefined = undefined>({
           key: res.key,
           index: res.index || 0,
           endIndex: (res.index || 0) + match[0].length,
+          foundIn: res.foundIn === 'values' ? 'values' : 'keys',
         };
       }
     }

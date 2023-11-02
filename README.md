@@ -39,3 +39,21 @@ console.log(
 );
 
 ```
+
+## Result Sample
+```json
+{
+  "result": [
+    {
+      "key": "_embedded.episodes[1].summary",
+      "index": 239,
+      "endIndex": 244
+    },
+    {
+      "key": "_embedded.episodes[59].summary",
+      "index": 137,
+      "endIndex": 142
+    }
+  ]
+}
+````
