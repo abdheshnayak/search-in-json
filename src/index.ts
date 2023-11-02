@@ -214,66 +214,73 @@ export const search = <A extends boolean | undefined = undefined>({
   searchIn = 'values',
   withMapResult,
 }: ISearch<A>): ISearchResult<A> => {
-  const dataString = JSON.stringify(data, null, 2);
+  try {
+    const dataString = JSON.stringify(data, null, 2);
 
-  if (text) {
-    regex = new RegExp(text, ignoreCamelCase ? 'gi' : 'g');
-  }
-
-  if (!regex) {
-    return {
-      result: (withMapResult ? {} : []) as ISearchResult<A>['result'],
-      error: new Error('No regex provided'),
-    };
-  }
-
-  let match = regex.exec(dataString);
-  const resultMap: {
-    [key: string]: SearchResultItem;
-  } = {};
-
-  if (debug) {
-    console.time('search');
-  }
-
-  do {
-    if (match) {
-      const lines = dataString.slice(0, match.index).split('\n');
-      const path = lines.length;
-      const index = lines[lines.length - 1].length;
-
-      const res = getPath({
-        data,
-        depth: path - 1,
-        key: '',
-        indent: 1,
-        cursorIndex: index,
-        searchIn,
-      });
-
-      if (res.found) {
-        resultMap[res.key] = {
-          key: res.key,
-          index: res.index || 0,
-          endIndex: (res.index || 0) + match[0].length,
-          foundIn: res.foundIn === 'values' ? 'values' : 'keys',
-        };
-      }
+    if (text) {
+      regex = new RegExp(text, ignoreCamelCase ? 'gi' : 'g');
     }
 
-    match = regex.exec(dataString);
-  } while (match);
-  if (debug) {
-    console.timeEnd('search');
-  }
+    if (!regex) {
+      return {
+        result: (withMapResult ? {} : []) as ISearchResult<A>['result'],
+        error: new Error('No regex provided'),
+      };
+    }
 
-  if (withMapResult) {
+    let match = regex.exec(dataString);
+    const resultMap: {
+      [key: string]: SearchResultItem;
+    } = {};
+
+    if (debug) {
+      console.time('search');
+    }
+
+    do {
+      if (match) {
+        const lines = dataString.slice(0, match.index).split('\n');
+        const path = lines.length;
+        const index = lines[lines.length - 1].length;
+
+        const res = getPath({
+          data,
+          depth: path - 1,
+          key: '',
+          indent: 1,
+          cursorIndex: index,
+          searchIn,
+        });
+
+        if (res.found) {
+          resultMap[res.key] = {
+            key: res.key,
+            index: res.index || 0,
+            endIndex: (res.index || 0) + match[0].length,
+            foundIn: res.foundIn === 'values' ? 'values' : 'keys',
+          };
+        }
+      }
+
+      match = regex.exec(dataString);
+    } while (match);
+    if (debug) {
+      console.timeEnd('search');
+    }
+
+    if (withMapResult) {
+      return {
+        result: resultMap as ISearchResult<A>['result'],
+      };
+    }
+
     return {
-      result: resultMap as ISearchResult<A>['result'],
+      result: Object.values(resultMap) as ISearchResult<A>['result'],
+    };
+  } catch (err) {
+    return {
+      error: err as Error,
+      result: (withMapResult ? {} : []) as ISearchResult<A>['result'],
     };
   }
-
-  return {
-    result: Object.values(resultMap) as ISearchResult<A>['result'],
-  };
 };
