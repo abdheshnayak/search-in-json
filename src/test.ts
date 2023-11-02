@@ -4,10 +4,10 @@ import { data } from './data';
 const init = () => {
   const res = search({
     data,
-    text: 'order',
+    text: 'r',
     debug: true,
     ignoreCamelCase: true,
-    searchIn: 'both',
+    searchIn: 'values',
     // regex: /order/gi,
   });
 

@@ -120,7 +120,7 @@ const getPath = ({
     --depth;
 
     if (depth <= 0) {
-      const check = cursorIndex >= indent * 2 + key.length;
+      const check = cursorIndex >= indent * 2 + key.length + 2;
 
       if (searchIn === 'values' && check) {
         return {
@@ -128,7 +128,19 @@ const getPath = ({
           depth: 0,
           found: true,
           foundIn: 'values',
-          index: cursorIndex - (indent * 2 + key.length + 4) - 1,
+          index:
+            cursorIndex -
+            (indent * 2 + key.length + 4) -
+            (() => {
+              if (
+                typeof data[key] === 'number' ||
+                typeof data[key] === 'boolean'
+              ) {
+                return 0;
+              }
+
+              return 1;
+            })(),
         };
       }
 
@@ -148,11 +160,24 @@ const getPath = ({
             key,
             depth: 0,
             found: true,
-            index: cursorIndex - (indent * 2 + key.length + 4) - 1,
+            index:
+              cursorIndex -
+              (indent * 2 + key.length + 4) -
+              (() => {
+                if (
+                  typeof data[key] === 'number' ||
+                  typeof data[key] === 'boolean'
+                ) {
+                  return 0;
+                }
+
+                return 1;
+              })(),
             foundIn: 'values',
           };
         }
 
+        // should never reach
         return {
           key,
           depth: 0,

@@ -26,7 +26,7 @@ export const data = {
   },
   webChannel: null,
   dvdCountry: null,
-  externals: { tvrage: 33381, thetvdb: 275274, imdb: 'tt2861424' },
+  externals: { tvrage: true, thetvdb: 275274, imdb: 'tt2861424' },
   image: {
     medium:
       'https://static.tvmaze.com/uploads/images/medium_portrait/477/1194843.jpg',
