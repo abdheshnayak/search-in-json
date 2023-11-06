@@ -44,6 +44,7 @@ interface IGetPath {
   indent: number;
   cursorIndex: number;
   searchIn: 'values' | 'keys' | 'both';
+  match: RegExpExecArray;
 }
 
 const getPath = ({
@@ -53,12 +54,14 @@ const getPath = ({
   indent,
   cursorIndex,
   searchIn,
+  match,
 }: IGetPath): {
   key: string;
   depth: number;
   found: boolean;
   index?: number;
   foundIn?: 'values' | 'keys';
+  endIndex?: number;
 } => {
   if (depth <= 0) {
     return {
@@ -96,6 +99,7 @@ const getPath = ({
         indent: indent + 1,
         cursorIndex,
         searchIn,
+        match,
       });
       depth = res.depth;
 
@@ -125,13 +129,8 @@ const getPath = ({
       const check = cursorIndex >= indent * 2 + key.length + 2;
 
       if (searchIn === 'values' && check) {
-        return {
-          key,
-          depth: 0,
-          found: true,
-          foundIn: 'values',
-          index:
-            cursorIndex -
+        const i = Math.max(
+          cursorIndex -
             (indent * 2 + key.length + 4) -
             (() => {
               if (
@@ -143,27 +142,38 @@ const getPath = ({
 
               return 1;
             })(),
+          0
+        );
+
+        return {
+          key,
+          depth: 0,
+          found: true,
+          foundIn: 'values',
+          index: i,
+          endIndex: Math.min(
+            i + match[0].length,
+            `${data[key]}`.length - i - 1
+          ),
         };
       }
 
       if (searchIn === 'keys' && !check) {
+        const i = Math.max(cursorIndex - (indent * 2 + 1), 0);
         return {
           key,
           depth: 0,
           found: true,
           foundIn: 'keys',
-          index: cursorIndex - (indent * 2 + 1),
+          index: i,
+          endIndex: Math.min(i + match[0].length, key.length - 1),
         };
       }
 
       if (searchIn === 'both') {
         if (check) {
-          return {
-            key,
-            depth: 0,
-            found: true,
-            index:
-              cursorIndex -
+          const i = Math.max(
+            cursorIndex -
               (indent * 2 + key.length + 4) -
               (() => {
                 if (
@@ -175,20 +185,32 @@ const getPath = ({
 
                 return 1;
               })(),
+            0
+          );
+
+          return {
+            key,
+            depth: 0,
+            found: true,
+            index: i,
             foundIn: 'values',
+            endIndex: Math.min(i + match[0].length, `${data[key]}`.length - 1),
           };
         }
 
-        // should never reach
+        const i = Math.max(cursorIndex - (indent * 2 + 1), 0);
+
         return {
           key,
           depth: 0,
           found: true,
-          index: cursorIndex - (indent * 2 + 1),
+          index: i,
           foundIn: 'keys',
+          endIndex: Math.min(i + match[0].length, key.length - 1),
         };
       }
 
+      // should never reach
       return {
         key,
         depth: 0,
@@ -205,7 +227,7 @@ const getPath = ({
   };
 };
 
-export const search = <A extends boolean | undefined = undefined>({
+const searchInternal = <A extends boolean | undefined = undefined>({
   data,
   text,
   debug = false,
@@ -229,6 +251,7 @@ export const search = <A extends boolean | undefined = undefined>({
     }
 
     let match = regex.exec(dataString);
+
     const resultMap: {
       [key: string]: SearchResultItem;
     } = {};
@@ -237,8 +260,10 @@ export const search = <A extends boolean | undefined = undefined>({
       console.time('search');
     }
 
+    var emptyCount = 0;
+
     do {
-      if (match) {
+      if (match && match.index > 0) {
         const lines = dataString.slice(0, match.index).split('\n');
         const path = lines.length;
         const index = lines[lines.length - 1].length;
@@ -250,15 +275,22 @@ export const search = <A extends boolean | undefined = undefined>({
           indent: 1,
           cursorIndex: index,
           searchIn,
+          match,
         });
 
         if (res.found) {
           resultMap[res.key] = {
             key: res.key,
             index: res.index || 0,
-            endIndex: (res.index || 0) + match[0].length,
+            // endIndex: (res.index || 0) + match[0].length,
+            endIndex: res.endIndex || 0,
             foundIn: res.foundIn === 'values' ? 'values' : 'keys',
           };
+        }
+      } else if (match && match.index === 0) {
+        emptyCount++;
+        if (emptyCount === 2) {
+          break;
         }
       }
 
@@ -283,4 +315,15 @@ export const search = <A extends boolean | undefined = undefined>({
       result: (withMapResult ? {} : []) as ISearchResult<A>['result'],
     };
   }
+};
+
+export const search = <A extends boolean | undefined = undefined>(
+  props: ISearch<A>
+): Promise<ISearchResult<A>> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const res = searchInternal(props);
+      resolve(res);
+    }, 0);
+  });
 };
