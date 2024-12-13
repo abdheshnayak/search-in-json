@@ -2,7 +2,7 @@
   "name": "search-in-json",
   "author": "Abdhesh Nayak",
   "license": "MIT",
-  "version": "1.0.67",
+  "version": "1.0.68",
   "description": "",
   "private": false,
   "types": "./dist/@types/index.d.ts",
@@ -12,16 +12,18 @@
   "exports": {
     ".": {
       "import": {
-        "default": "./dist/index.mjs"
+        "default": "./dist/index.mjs",
+        "types": "./dist/@types/index.d.ts"
       },
       "require": {
-        "default": "./dist/index.js"
+        "default": "./dist/index.js",
+        "types": "./dist/@types/index.d.ts"
       }
     }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/OpenSource-HQ/search-in-json.git"
+    "url": "git+https://github.com/abdheshnayak/search-in-json.git"
   },
   "keywords": [
     "search",
